@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 import { useSelector } from "react-redux";
 import { Box, Typography, TextField, Button } from "@mui/material";
 
-const socket = io("http://localhost:3001"); // Change to Render URL after deployment
+const socket = io(process.env.REACT_APP_API_BASE_URL); // Change to Render URL after deployment
 
 const ChatBox = ({ selectedUser }) => {
   const { _id: loggedInUserId } = useSelector((state) => state.user);
@@ -16,7 +16,7 @@ const ChatBox = ({ selectedUser }) => {
     // Load chat history
     const getMessages = async () => {
       const res = await fetch(
-        `http://localhost:3001/messages/${loggedInUserId}/${selectedUser._id}`,
+        `${process.env.REACT_APP_API_BASE_URL}/messages/${loggedInUserId}/${selectedUser._id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -50,7 +50,7 @@ const ChatBox = ({ selectedUser }) => {
     };
 
     // Send to backend (MongoDB)
-    const res = await fetch("http://localhost:3001/messages", {
+    const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/messages`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,

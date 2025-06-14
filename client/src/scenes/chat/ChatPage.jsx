@@ -6,7 +6,7 @@ import SendIcon from "@mui/icons-material/Send";
 import Navbar from "../navbar";
 import io from "socket.io-client";
 
-const socket = io("http://localhost:3001");
+const socket = io(process.env.REACT_APP_API_BASE_URL);
 
 const ChatPage = () => {
   const { userId: receiverId } = useParams();
@@ -20,7 +20,7 @@ const ChatPage = () => {
   const fetchMessages = useCallback(async () => {
     if (!receiverId) return;
     try {
-      const res = await fetch(`http://localhost:3001/messages/${receiverId}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/messages/${receiverId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -42,7 +42,7 @@ const ChatPage = () => {
   socket.emit("sendMessage", newMessage);
 
   // Save to DB
-  await fetch("http://localhost:3001/messages", {
+  await fetch(`${process.env.REACT_APP_API_BASE_URL}/messages`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
